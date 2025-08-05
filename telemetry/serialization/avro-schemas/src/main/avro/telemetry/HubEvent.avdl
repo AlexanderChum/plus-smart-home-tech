@@ -10,7 +10,7 @@ protocol HubEventProtocol {
         HUMIDITY
     }
 
-    enum DeviceActionAvro {
+    enum ActionTypeAvro {
         ACTIVATE,
         DEACTIVATE,
         INVERSE,
@@ -33,7 +33,7 @@ protocol HubEventProtocol {
 
     record DeviceActionAvro {
         string sensor_id;
-        DeviceActionAvro type;
+        ActionTypeAvro type;
         int? value = null;
     }
 
