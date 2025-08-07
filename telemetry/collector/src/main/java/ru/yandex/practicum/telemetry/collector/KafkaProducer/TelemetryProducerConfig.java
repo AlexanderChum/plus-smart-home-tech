@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -19,20 +18,11 @@ import java.util.Map;
 @Getter
 @Setter
 public class TelemetryProducerConfig {
-    @Value("${spring.kafka.bootstrap-servers}")
-    private String bootstrapServers;
-
-    @Value("${spring.kafka.producer.key-serializer}")
-    private String keySerializer;
-
-    @Value("${spring.kafka.producer.value-serializer}")
-    private String valueSerializer;
-
-    @Value("${telemetry.sensor.topic}")
-    private String sensorTopic;
-
-    @Value("${telemetry.hub.topic}")
-    private String hubTopic;
+    private String bootstrapServers = "localhost:9092";
+    private String keySerializer = "org.apache.kafka.common.serialization.StringSerializer";
+    private String valueSerializer = "ru.practicum.kafka.serializer.AvroSerializer";
+    private String sensorTopic = "telemetry.sensors.v1";
+    private String hubTopic = "telemetry.hubs.v1";
 
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
@@ -41,14 +31,13 @@ public class TelemetryProducerConfig {
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializer);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerializer);
 
-        log.info("Создание ProducerFactory с конфигурацией: bootstrapServers={}, sensorTopic={}, hubTopic={}", 
-                bootstrapServers, sensorTopic, hubTopic);
+        log.info("Создание ProducerFactory");
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 
     @Bean
     public KafkaTemplate<String, Object> kafkaTemplate() {
-        log.info("Создание KafkaTemplate для отправки сообщений в заданные топики");
+        log.info("Создание KafkaTemplate");
         return new KafkaTemplate<>(producerFactory());
     }
 }

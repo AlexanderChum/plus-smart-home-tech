@@ -1,6 +1,6 @@
 package ru.yandex.practicum.telemetry.collector.Models.HubEvent;
 
-import ru.yandex.practicum.telemetry.collector.Models.Enums.HubEventType;
+import ru.yandex.practicum.telemetry.collector.Models.HubEvent.Enums.HubEventType;
 import ru.yandex.practicum.telemetry.collector.Models.HubEvent.DeviceEventImpl.DeviceAddedEvent;
 import ru.yandex.practicum.telemetry.collector.Models.HubEvent.DeviceEventImpl.DeviceRemovedEvent;
 import ru.yandex.practicum.telemetry.collector.Models.HubEvent.ScenarioEventImpl.ScenarioAddedEvent;
@@ -15,26 +15,26 @@ import lombok.ToString;
 
 import java.time.Instant;
 
-@Getter
 @Setter
+@Getter
 @ToString
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.EXISTING_PROPERTY,
-        property = "true",
+        property = "type",
         defaultImpl = HubEventType.class
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = DeviceAddedEvent.class, name = "DEVICE_ADDED"),
         @JsonSubTypes.Type(value = DeviceRemovedEvent.class, name = "DEVICE_REMOVED"),
         @JsonSubTypes.Type(value = ScenarioAddedEvent.class, name = "SCENARIO_ADDED"),
-        @JsonSubTypes.Type(value = ScenarioRemovedEvent.class, name = "SCENARIO_REMOVED")
+        @JsonSubTypes.Type(value = ScenarioRemovedEvent.class, name = "SCENARIO_REMOVED"),
 })
 public abstract class HubEvent {
     @NotBlank
-    String hubId;
+    private String hubId;
 
-    Instant timestamp = Instant.now();
+    private Instant timestamp = Instant.now();
 
     @NotNull
     public abstract HubEventType getType();

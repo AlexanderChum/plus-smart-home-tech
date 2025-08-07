@@ -1,6 +1,6 @@
 package ru.yandex.practicum.telemetry.collector.Models.HubEvent.DeviceEventImpl;
 
-import ru.yandex.practicum.telemetry.collector.Models.Enums.HubEventType;
+import ru.yandex.practicum.telemetry.collector.Models.HubEvent.Enums.HubEventType;
 import ru.yandex.practicum.telemetry.collector.Models.HubEvent.HubEvent;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

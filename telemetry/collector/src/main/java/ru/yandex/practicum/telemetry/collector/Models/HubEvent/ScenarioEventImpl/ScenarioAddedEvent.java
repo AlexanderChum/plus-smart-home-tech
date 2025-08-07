@@ -1,10 +1,9 @@
 package ru.yandex.practicum.telemetry.collector.Models.HubEvent.ScenarioEventImpl;
 
-import ru.yandex.practicum.telemetry.collector.Models.Enums.DeviceAction;
-import ru.yandex.practicum.telemetry.collector.Models.Enums.HubEventType;
+import ru.yandex.practicum.telemetry.collector.Models.HubEvent.DeviceEventImpl.DeviceAction;
+import ru.yandex.practicum.telemetry.collector.Models.HubEvent.Enums.HubEventType;
 import ru.yandex.practicum.telemetry.collector.Models.HubEvent.HubEvent;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,11 +19,9 @@ public class ScenarioAddedEvent extends HubEvent {
     private String name;
 
     @NotNull
-    @NotEmpty
-    List<ScenatioCondition> conditions;
+    List<ScenarioCondition> conditions;
 
     @NotNull
-    @NotEmpty
     List<DeviceAction> actions;
 
     @Override

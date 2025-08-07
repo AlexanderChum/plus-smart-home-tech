@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.collector.Models.Enums;
+package ru.yandex.practicum.telemetry.collector.Models.HubEvent.Enums;
 
 public enum ConditionType {
     MOTION,
