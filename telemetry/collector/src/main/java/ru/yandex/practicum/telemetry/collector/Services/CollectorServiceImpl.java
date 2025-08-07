@@ -23,7 +23,7 @@ import ru.yandex.practicum.telemetry.collector.Models.SensorEvent.SensorEventImp
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class CollectorServiceImpl implements CollectorService{
+public class CollectorServiceImpl implements CollectorService {
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final EventsMapper eventMapper;
     private final TelemetryProducerConfig config;
