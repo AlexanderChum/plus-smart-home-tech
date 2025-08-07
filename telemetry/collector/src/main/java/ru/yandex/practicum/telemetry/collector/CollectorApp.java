@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AppClass {
+public class CollectorApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(AppClass.class, args);
+        SpringApplication.run(CollectorApp.class, args);
     }
 }
