@@ -55,7 +55,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>ru.yandex.practicum.telemetry.collector.CollectorApplication</mainClass>
+                    <mainClass>ru.yandex.practicum.telemetry.collector.CollectorApp</mainClass>
                 </configuration>
                 <executions>
                     <execution>
