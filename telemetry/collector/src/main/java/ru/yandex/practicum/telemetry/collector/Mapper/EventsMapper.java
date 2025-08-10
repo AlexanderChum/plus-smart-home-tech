@@ -40,53 +40,30 @@ import java.util.stream.Collectors;
         unmappedTargetPolicy = ReportingPolicy.ERROR)
 public abstract class EventsMapper {
 
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "hubId", source = "hubId")
-    @Mapping(target = "timestamp", source = "timestamp")
     @Mapping(target = "payload", source = ".", qualifiedByName = "toClimatePayload")
     public abstract SensorEventAvro toAvro(ClimateSensorEvent event);
 
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "hubId", source = "hubId")
-    @Mapping(target = "timestamp", source = "timestamp")
     @Mapping(target = "payload", source = ".", qualifiedByName = "toLightPayload")
     public abstract SensorEventAvro toAvro(LightSensorEvent event);
 
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "hubId", source = "hubId")
-    @Mapping(target = "timestamp", source = "timestamp")
     @Mapping(target = "payload", source = ".", qualifiedByName = "toMotionPayload")
     public abstract SensorEventAvro toAvro(MotionSensorEvent event);
 
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "hubId", source = "hubId")
-    @Mapping(target = "timestamp", source = "timestamp")
     @Mapping(target = "payload", source = ".", qualifiedByName = "toSwitchPayload")
     public abstract SensorEventAvro toAvro(SwitchSensorEvent event);
 
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "hubId", source = "hubId")
-    @Mapping(target = "timestamp", source = "timestamp")
     @Mapping(target = "payload", source = ".", qualifiedByName = "toTemperaturePayload")
     public abstract SensorEventAvro toAvro(TemperatureSensorEvent event);
 
-    @Mapping(target = "hubId", source = "hubId")
-    @Mapping(target = "timestamp", source = "timestamp")
     @Mapping(target = "payload", source = ".", qualifiedByName = "toDeviceAddedPayload")
     public abstract HubEventAvro toAvro(DeviceAddedEvent event);
 
-    @Mapping(target = "hubId", source = "hubId")
-    @Mapping(target = "timestamp", source = "timestamp")
     @Mapping(target = "payload", source = ".", qualifiedByName = "toDeviceRemovedPayload")
     public abstract HubEventAvro toAvro(DeviceRemovedEvent event);
 
-    @Mapping(target = "hubId", source = "hubId")
-    @Mapping(target = "timestamp", source = "timestamp")
     @Mapping(target = "payload", source = ".", qualifiedByName = "toScenarioAddedPayload")
     public abstract HubEventAvro toAvro(ScenarioAddedEvent event);
 
-    @Mapping(target = "hubId", source = "hubId")
-    @Mapping(target = "timestamp", source = "timestamp")
     @Mapping(target = "payload", source = ".", qualifiedByName = "toScenarioRemovedPayload")
     public abstract HubEventAvro toAvro(ScenarioRemovedEvent event);
 
