@@ -18,18 +18,18 @@ import java.util.Map;
 @Getter
 @Setter
 public class TelemetryProducerConfig {
-    private String bootstrapServers = "localhost:9092";
-    private String keySerializer = "org.apache.kafka.common.serialization.StringSerializer";
-    private String valueSerializer = "ru.practicum.kafka.serializer.AvroSerializer";
-    private String sensorTopic = "telemetry.sensors.v1";
-    private String hubTopic = "telemetry.hubs.v1";
+    public final static String BOOTSTRAPSERVERS = "localhost:9092";
+    public final static String KEYSERIALIZER = "org.apache.kafka.common.serialization.StringSerializer";
+    public final static String VALUESERIALIZER = "ru.practicum.kafka.serializer.AvroSerializer";
+    public final static String SENSORTOPIC = "telemetry.sensors.v1";
+    public final static String HUBTOPIC = "telemetry.hubs.v1";
 
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializer);
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerializer);
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAPSERVERS);
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KEYSERIALIZER);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, VALUESERIALIZER);
 
         log.info("Создание ProducerFactory");
         return new DefaultKafkaProducerFactory<>(configProps);

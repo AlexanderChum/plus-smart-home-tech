@@ -12,7 +12,7 @@ import ru.yandex.practicum.telemetry.collector.Models.SensorEvent.SensorEventTyp
 @ToString(callSuper = true)
 public class SwitchSensorEvent extends SensorEvent {
     @NotNull
-    Boolean state;
+    private Boolean state;
 
     @Override
     public SensorEventType getType() {

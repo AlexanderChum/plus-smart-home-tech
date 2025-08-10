@@ -36,10 +36,8 @@ import ru.yandex.practicum.telemetry.collector.Models.HubEvent.ScenarioEventImpl
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(
-        componentModel = "spring",
-        unmappedTargetPolicy = ReportingPolicy.ERROR
-)
+@Mapper(componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.ERROR)
 public abstract class EventsMapper {
 
     @Mapping(target = "id", source = "id")

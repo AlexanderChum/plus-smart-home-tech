@@ -22,24 +22,12 @@ public class Controller {
     @PostMapping("/sensors")
     public ResponseEntity<Void> sendSensorData(@Valid @RequestBody SensorEvent event) {
         log.info("Получение события от датчика");
-        try {
-            collectorService.sendSensorData(event);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            log.error("Ошибка при обработке события");
-            return ResponseEntity.badRequest().build();
-        }
+        return collectorService.sendSensorData(event);
     }
 
     @PostMapping("/hubs")
     public ResponseEntity<Void> sendHubData(@Valid @RequestBody HubEvent event) {
         log.info("Получение информации для хаба");
-        try {
-            collectorService.sendHubData(event);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            log.error("Ошибка при обработке события для хаба");
-            return ResponseEntity.badRequest().build();
-        }
+        return collectorService.sendHubData(event);
     }
 }
