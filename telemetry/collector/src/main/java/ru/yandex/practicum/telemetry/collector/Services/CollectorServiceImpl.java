@@ -8,8 +8,8 @@ import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.telemetry.collector.KafkaProducer.TelemetryProducerConfig;
 
-import static ru.yandex.practicum.telemetry.collector.KafkaProducer.TelemetryProducerConfig.HUBTOPIC;
-import static ru.yandex.practicum.telemetry.collector.KafkaProducer.TelemetryProducerConfig.SENSORTOPIC;
+import static ru.yandex.practicum.telemetry.collector.KafkaProducer.TelemetryProducerConfig.HUB_TOPIC;
+import static ru.yandex.practicum.telemetry.collector.KafkaProducer.TelemetryProducerConfig.SENSOR_TOPIC;
 
 @Service
 @Slf4j
@@ -20,7 +20,7 @@ public class CollectorServiceImpl implements CollectorService {
 
     @Override
     public void sendSensorData(SensorEventAvro event) {
-        kafkaTemplate.send(SENSORTOPIC, null, event.getTimestamp().toEpochMilli(), event.getHubId(), event)
+        kafkaTemplate.send(SENSOR_TOPIC, null, event.getTimestamp().toEpochMilli(), event.getHubId(), event)
                 .whenComplete((result, exception) -> {
                     if (exception == null) {
                         log.info("Событие сенсора успешно отправлено");
@@ -32,7 +32,7 @@ public class CollectorServiceImpl implements CollectorService {
 
     @Override
     public void sendHubData(HubEventAvro event) {
-        kafkaTemplate.send(HUBTOPIC, null, event.getTimestamp().toEpochMilli(), event.getHubId(), event)
+        kafkaTemplate.send(HUB_TOPIC, null, event.getTimestamp().toEpochMilli(), event.getHubId(), event)
                 .whenComplete((result, exception) -> {
                     if (exception == null) {
                         log.info("Событие хаба успешно отправлено");
