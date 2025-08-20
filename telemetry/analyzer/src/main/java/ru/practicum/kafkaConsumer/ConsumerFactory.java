@@ -1,5 +1,6 @@
 package ru.practicum.kafkaConsumer;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@Slf4j
 public class ConsumerFactory {
     public final static String BOOTSTRAP_SERVERS = "localhost:9092";
     public final static String KEY_DESERIALIZER = "org.apache.kafka.common.serialization.StringDeserializer";
@@ -31,6 +33,7 @@ public class ConsumerFactory {
         configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, VALUE_SNAPSHOT_DESERIALIZER);
         configProps.put(ConsumerConfig.GROUP_ID_CONFIG, CLIENT_SNAPSHOT_GROUP);
 
+        log.info("Создание консьюмера снепшотов для анализатора");
         return new KafkaConsumer<>(configProps);
     }
 
@@ -42,6 +45,7 @@ public class ConsumerFactory {
         configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, VALUE_HUB_DESERIALIZER);
         configProps.put(ConsumerConfig.GROUP_ID_CONFIG, CLIENT_HUB_GROUP);
 
+        log.info("Создание консьюмера хаба для анализатора");
         return new KafkaConsumer<>(configProps);
     }
 }
