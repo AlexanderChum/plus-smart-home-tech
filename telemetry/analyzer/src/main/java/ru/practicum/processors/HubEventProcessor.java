@@ -7,8 +7,9 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.stereotype.Component;
-import ru.practicum.kafkaConsumer.ConsumerFactory;
+import ru.practicum.KafkaAndGrpcConfigs.ConsumerFactory;
 import ru.practicum.mapper.MapperClass;
+import ru.practicum.mapper.ScenarioMappingService;
 import ru.practicum.model.Scenario;
 import ru.practicum.model.Sensor;
 import ru.practicum.repositories.ScenarioRepository;
@@ -22,7 +23,7 @@ import ru.yandex.practicum.kafka.telemetry.event.ScenarioRemovedEventAvro;
 import java.time.Duration;
 import java.util.List;
 
-import static ru.practicum.kafkaConsumer.ConsumerFactory.HUB_TOPIC;
+import static ru.practicum.KafkaAndGrpcConfigs.ConsumerFactory.HUB_TOPIC;
 
 @Slf4j
 @Component
@@ -30,6 +31,7 @@ import static ru.practicum.kafkaConsumer.ConsumerFactory.HUB_TOPIC;
 public class HubEventProcessor implements Runnable {
     private final ConsumerFactory factory;
     private final MapperClass mapper;
+    private final ScenarioMappingService scenarioMappingService;
     private final SensorRepository sensorRepository;
     private final ScenarioRepository scenarioRepository;
 
@@ -59,7 +61,7 @@ public class HubEventProcessor implements Runnable {
                                 sensorRepository.deleteById(removedAvro.getId());
                             }
                             case ScenarioAddedEventAvro scenarioAvro -> {
-                                Scenario scenario = mapper.mapFromAvro(scenarioAvro, event.getHubId());
+                                Scenario scenario = scenarioMappingService.completeScenarioMapping(scenarioAvro, event.getHubId());
                                 scenarioRepository.save(scenario);
                             }
                             case ScenarioRemovedEventAvro removedAvro -> {

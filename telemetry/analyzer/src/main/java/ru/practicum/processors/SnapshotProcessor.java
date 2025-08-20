@@ -3,13 +3,12 @@ package ru.practicum.processors;
 import com.google.protobuf.Timestamp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.stereotype.Component;
-import ru.practicum.kafkaConsumer.ConsumerFactory;
+import ru.practicum.KafkaAndGrpcConfigs.ConsumerFactory;
 import ru.practicum.mapper.MapperClass;
 import ru.practicum.model.Condition;
 import ru.practicum.model.Scenario;
@@ -30,13 +29,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static ru.practicum.kafkaConsumer.ConsumerFactory.SNAPSHOT_TOPIC;
+import static ru.practicum.KafkaAndGrpcConfigs.ConsumerFactory.SNAPSHOT_TOPIC;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class SnapshotProcessor implements Runnable {
-    @GrpcClient("hub-router-controller")
     private final HubRouterControllerGrpc.HubRouterControllerBlockingStub hubRouter;
     private final ConsumerFactory factory;
     private final MapperClass mapper;

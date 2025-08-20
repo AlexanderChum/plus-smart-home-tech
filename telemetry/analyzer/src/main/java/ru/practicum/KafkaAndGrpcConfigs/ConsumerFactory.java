@@ -1,4 +1,4 @@
-package ru.practicum.kafkaConsumer;
+package ru.practicum.KafkaAndGrpcConfigs;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecordBase;
@@ -16,7 +16,7 @@ public class ConsumerFactory {
     public final static String BOOTSTRAP_SERVERS = "localhost:9092";
     public final static String KEY_DESERIALIZER = "org.apache.kafka.common.serialization.StringDeserializer";
 
-    public final static String VALUE_HUB_DESERIALIZER = "ru.practicum.kafka.deserializer.HubEventAvroDeserializer";
+    public final static String VALUE_HUB_DESERIALIZER = "ru.practicum.kafka.deserializer.HubEventDeserializer";
     public final static String VALUE_SNAPSHOT_DESERIALIZER = "ru.practicum.kafka.deserializer.SensorEventDeserializer";
 
     public final static String CLIENT_HUB_GROUP = "analyzer-hub-group";
