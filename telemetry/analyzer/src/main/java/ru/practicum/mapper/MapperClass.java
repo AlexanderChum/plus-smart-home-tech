@@ -16,27 +16,22 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface MapperClass {
 
-    // Маппинг Action -> DeviceActionProto
     @Mapping(target = "sensorId", source = "sensor.id")
     DeviceActionProto mapToProto(Action action);
 
-    // Маппинг DeviceActionAvro -> Action
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "scenarios", ignore = true)
     @Mapping(target = "sensor.id", source = "sensorId")
     Action mapFromAvro(DeviceActionAvro avro);
 
-    // Маппинг ScenarioConditionAvro -> Condition
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "scenarios", ignore = true)
     @Mapping(target = "sensor.id", source = "sensorId")
     @Mapping(target = "value", source = "value", qualifiedByName = "extractValue")
     Condition mapFromAvro(ScenarioConditionAvro condition);
 
-    // Маппинг списка ScenarioConditionAvro -> List<Condition>
     List<Condition> mapFromAvro(List<ScenarioConditionAvro> conditions);
 
-    // Маппинг ScenarioAddedEventAvro -> Scenario
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "hubId", source = "hubId")
     @Mapping(target = "name", source = "avro.name")
@@ -44,7 +39,6 @@ public interface MapperClass {
     @Mapping(target = "actions", source = "avro.actions")
     Scenario mapFromAvro(ScenarioAddedEventAvro avro, String hubId);
 
-    // Метод для извлечения значения из union-поля Avro
     @Named("extractValue")
     default Integer extractValue(Object value) {
         if (value instanceof Integer) return (Integer) value;
