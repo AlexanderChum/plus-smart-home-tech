@@ -52,19 +52,25 @@ public class HubEventProcessor implements Runnable {
 
                         switch (payload) {
                             case DeviceAddedEventAvro deviceAvro -> {
+                                log.info("Добавляем устройство {} для хаба {}", deviceAvro.getId(), event.getHubId());
                                 Sensor sensor = new Sensor();
                                 sensor.setId(deviceAvro.getId());
                                 sensor.setHubId(event.getHubId());
                                 sensorRepository.save(sensor);
+                                log.info("Устройство сохранено: {}", sensor);
                             }
                             case DeviceRemovedEventAvro removedAvro -> {
+                                log.info("Удаляем устройство {}", removedAvro.getId());
                                 sensorRepository.deleteById(removedAvro.getId());
                             }
                             case ScenarioAddedEventAvro scenarioAvro -> {
+                                log.info("Добавляем сценарий {} для хаба {}", scenarioAvro.getName(), event.getHubId());
                                 Scenario scenario = scenarioMappingService.completeScenarioMapping(scenarioAvro, event.getHubId());
                                 scenarioRepository.save(scenario);
+                                log.info("Сценарий сохранен: {}", scenario);
                             }
                             case ScenarioRemovedEventAvro removedAvro -> {
+                                log.info("Удаляем сценарий {}", removedAvro.getName());
                                 scenarioRepository.deleteByName(removedAvro.getName());
                             }
                             default -> log.warn("Неизвестный тип события");

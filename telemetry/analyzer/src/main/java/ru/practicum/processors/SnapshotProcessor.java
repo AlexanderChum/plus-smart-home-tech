@@ -50,33 +50,44 @@ public class SnapshotProcessor implements Runnable {
             while (true) {
                 ConsumerRecords<String, SpecificRecordBase> records = consumer.poll(Duration.ofSeconds(1));
 
+                log.info("Получено {} записей из топика {}", records.count(), SNAPSHOT_TOPIC);
+
                 records.forEach(record -> {
                     try {
                         SensorsSnapshotAvro snapshot = (SensorsSnapshotAvro) record.value();
+                        log.info("Обрабатываем снапшот для хаба {}", snapshot.getHubId());
 
                         Map<String, SensorStateAvro> sensorStates = snapshot.getSensorsState();
                         if (sensorStates == null || sensorStates.isEmpty()) {
+                            log.warn("Пустой снапшот для хаба {}", snapshot.getHubId());
                             return;
                         }
 
                         List<Scenario> scenarios = repository.findByHubId(snapshot.getHubId());
+                        log.info("Найдено {} сценариев для хаба {}", scenarios.size(), snapshot.getHubId());
 
                         List<Scenario> triggeredScenarios = scenarios.stream()
-                                .filter(scenario ->
-                                        scenario.getConditions().stream()
-                                                .allMatch(condition ->
-                                                        checkCondition(
-                                                                condition,
-                                                                sensorStates.get(condition.getSensor().getId())
-                                                        )
-                                                )
-                                )
+                                .filter(scenario -> {
+                                    boolean triggered = scenario.getConditions().stream()
+                                            .allMatch(condition ->
+                                                    checkCondition(
+                                                            condition,
+                                                            sensorStates.get(condition.getSensor().getId())
+                                                    )
+                                            );
+                                    log.debug("Сценарий {} triggered: {}", scenario.getName(), triggered);
+                                    return triggered;
+                                })
                                 .toList();
 
+                        log.info("Сработало {} сценариев для хаба {}", triggeredScenarios.size(), snapshot.getHubId());
+
                         triggeredScenarios.forEach(scenario -> {
+                            log.info("Обрабатываем сценарий: {}", scenario.getName());
+                            Instant now = Instant.now();
                             Timestamp timestamp = Timestamp.newBuilder()
-                                    .setSeconds(Instant.now().getEpochSecond())
-                                    .setNanos(Instant.now().getNano())
+                                    .setSeconds(now.getEpochSecond())
+                                    .setNanos(now.getNano())
                                     .build();
 
                             scenario.getActions().stream()
@@ -87,7 +98,15 @@ public class SnapshotProcessor implements Runnable {
                                             .setAction(actionProto)
                                             .setTimestamp(timestamp)
                                             .build())
-                                    .forEach(hubRouter::handleDeviceAction);
+                                    .forEach(request -> {
+                                        try {
+                                            log.info("Отправляю deviceActionRequest: {}", request);
+                                            hubRouter.handleDeviceAction(request);
+                                            log.info("Команда успешно отправлена в Hub Router");
+                                        } catch (Exception e) {
+                                            log.error("Ошибка отправки команды в Hub Router", e);
+                                        }
+                                    });
                         });
 
                     } catch (Exception e) {
@@ -97,9 +116,8 @@ public class SnapshotProcessor implements Runnable {
 
                 consumer.commitSync();
             }
-
         } catch (WakeupException ignored) {
-            log.error("Ошибка WakeupException");
+            log.info("Получен WakeupException, завершаем работу");
         } catch (Exception e) {
             log.error("Ошибка во время обработки событий от датчиков", e);
         } finally {
