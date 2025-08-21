@@ -28,6 +28,7 @@ public class AggregatorConsumer {
         configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, VALUE_DESERIALIZER);
         configProps.put(ConsumerConfig.GROUP_ID_CONFIG, CLIENT_GROUP);
 
+        log.info("Создание консьюмера для аггрегатора");
         return new KafkaConsumer<>(configProps);
     }
 }

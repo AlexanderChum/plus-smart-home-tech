@@ -1,5 +1,6 @@
 package ru.practicum;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -12,6 +13,7 @@ import java.util.Map;
 import static ru.practicum.AggregatorConsumer.BOOTSTRAP_SERVERS;
 
 @Component
+@Slf4j
 public class AggregatorProducer {
     public final static String KEY_SERIALIZER = "org.apache.kafka.common.serialization.StringSerializer";
     public final static String VALUE_SERIALIZER = "ru.practicum.kafka.serializer.AvroSerializer";
@@ -24,6 +26,7 @@ public class AggregatorProducer {
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KEY_SERIALIZER);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, VALUE_SERIALIZER);
 
+        log.info("Создание продюсера для агрегатора");
         return new KafkaProducer<>(configProps);
     }
 }
