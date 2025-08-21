@@ -30,7 +30,6 @@ import static ru.practicum.KafkaAndGrpcConfigs.ConsumerFactory.HUB_TOPIC;
 @RequiredArgsConstructor
 public class HubEventProcessor implements Runnable {
     private final ConsumerFactory factory;
-    private final MapperClass mapper;
     private final ScenarioMappingService scenarioMappingService;
     private final SensorRepository sensorRepository;
     private final ScenarioRepository scenarioRepository;
@@ -44,6 +43,8 @@ public class HubEventProcessor implements Runnable {
 
             while (true) {
                 ConsumerRecords<String, SpecificRecordBase> records = consumer.poll(Duration.ofSeconds(1));
+
+                log.info("Получено {} записей из топика {}", records.count(), HUB_TOPIC);
 
                 records.forEach(record -> {
                     try {

@@ -42,7 +42,7 @@ public class AggregationStarter {
                             producer.send(new ProducerRecord<>(SNAPSHOT_TOPIC, snapshot.getHubId(), snapshot));
                         });
                     } catch (Exception e) {
-                        log.error("Error processing record", e);
+                        log.error("Ошибка обработки записи", e);
                     }
                 });
 

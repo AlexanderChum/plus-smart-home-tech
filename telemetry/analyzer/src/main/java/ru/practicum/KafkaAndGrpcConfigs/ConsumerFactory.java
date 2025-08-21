@@ -17,12 +17,12 @@ public class ConsumerFactory {
     public final static String KEY_DESERIALIZER = "org.apache.kafka.common.serialization.StringDeserializer";
 
     public final static String VALUE_HUB_DESERIALIZER = "ru.practicum.kafka.deserializer.HubEventDeserializer";
-    public final static String VALUE_SNAPSHOT_DESERIALIZER = "ru.practicum.kafka.deserializer.SensorEventDeserializer";
+    public final static String VALUE_SNAPSHOT_DESERIALIZER = "ru.practicum.kafka.deserializer.SnapshotDeserializer";
 
     public final static String CLIENT_HUB_GROUP = "analyzer-hub-group";
     public final static String CLIENT_SNAPSHOT_GROUP = "analyzer-snapshot-group";
 
-    public final static String HUB_TOPIC = "telemetry.sensors.v1";
+    public final static String HUB_TOPIC = "telemetry.hubs.v1";
     public final static String SNAPSHOT_TOPIC = "telemetry.snapshots.v1";
 
     @Bean

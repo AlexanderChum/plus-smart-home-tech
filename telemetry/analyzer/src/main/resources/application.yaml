@@ -29,8 +29,5 @@ spring:
       mode: always
       schema-locations: classpath:schema.sql
 
-logging:
-  level:
-    org.springframework.jdbc: DEBUG
-    org.springframework.boot.autoconfigure: DEBUG
-    org.hibernate: DEBUG
+server:
+  port: 8081
