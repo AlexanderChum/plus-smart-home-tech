@@ -40,7 +40,7 @@ public class Scenario {
             joinColumns = @JoinColumn(name = "scenario_id"),
             inverseJoinColumns = @JoinColumn(name = "condition_id")
     )
-    List<Condition> conditions;
+    private List<Condition> conditions;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
@@ -48,5 +48,5 @@ public class Scenario {
             joinColumns = @JoinColumn(name = "scenario_id"),
             inverseJoinColumns = @JoinColumn(name = "action_id")
     )
-    List<Action> actions;
+    private List<Action> actions;
 }
