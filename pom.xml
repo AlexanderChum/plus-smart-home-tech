@@ -33,6 +33,7 @@
         <grpc.version>1.63.0</grpc.version>
         <springstarter.version>3.3.2</springstarter.version>
         <pg.version>42.7.4</pg.version>
+        <spring-cloud-dependencies.version>2023.0.3</spring-cloud-dependencies.version>
 
         <!--       Plugins       -->
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
@@ -99,6 +100,14 @@
             </dependency>
 
             <!--    / GRPC dependencies management        -->
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
