@@ -1,11 +1,10 @@
 package ru.yandex.practicum.telemetry.collector.Services;
 
-import org.springframework.http.ResponseEntity;
-import ru.yandex.practicum.telemetry.collector.Models.HubEvent.HubEvent;
-import ru.yandex.practicum.telemetry.collector.Models.SensorEvent.SensorEvent;
+import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
+import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 
 public interface CollectorService {
-    ResponseEntity<Void> sendSensorData(SensorEvent event);
+    void sendSensorData(SensorEventAvro event);
 
-    ResponseEntity<Void> sendHubData(HubEvent event);
+    void sendHubData(HubEventAvro event);
 }
