@@ -1,4 +1,4 @@
-package ru.practicum.Models;
+package ru.practicum.store.Models;
 
 public enum QuantityState {
     ENDED,

@@ -1,4 +1,4 @@
-package ru.practicum.Models;
+package ru.practicum.store.Models;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -15,11 +15,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class QuantityStateRequest {
+public class SetProductQuantityStateRequest {
 
     @NotNull
     UUID productId;
 
     @NotNull
-    String quantityState;
+    QuantityState quantityState;
 }

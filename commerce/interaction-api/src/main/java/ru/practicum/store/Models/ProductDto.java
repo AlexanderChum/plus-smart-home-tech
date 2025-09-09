@@ -1,4 +1,4 @@
-package ru.practicum.Models;
+package ru.practicum.store.Models;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

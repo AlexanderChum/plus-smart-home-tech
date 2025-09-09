@@ -1,7 +1,7 @@
-package ru.practicum.Models.Errors;
+package ru.practicum.store.Models.Errors;
 
 public class ProductNotFoundException extends RuntimeException {
     public ProductNotFoundException(String message) {
-        super(message);
+        super(String.format(message));
     }
 }
