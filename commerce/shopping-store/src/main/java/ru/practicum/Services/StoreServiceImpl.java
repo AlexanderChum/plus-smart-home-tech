@@ -26,22 +26,26 @@ public class StoreServiceImpl implements StoreService {
     StoreRepository repository;
     StoreMapper mapper;
 
+    @Override
     public Page<ProductDto> getByCategory(ProductCategory category, Pageable pageable) {
         Page<Product> products = repository.findAllByProductCategory(category, pageable);
         return products.map(mapper::toDto);
     }
 
+    @Override
     public ProductDto add(ProductDto dto) {
         Product product = mapper.fromDto(dto);
         return mapper.toDto(findIfExists(repository.save(product).getId()));
     }
 
+    @Override
     public ProductDto update(ProductDto dto) {
         findIfExists(dto.getProductId());
         Product savedProduct = repository.save(mapper.fromDto(dto));
         return mapper.toDto(findIfExists(savedProduct.getId()));
     }
 
+    @Override
     public Boolean remove(UUID productId) {
         Product product = findIfExists(productId);
         product.setProductState(ProductState.DEACTIVATE);
@@ -49,6 +53,7 @@ public class StoreServiceImpl implements StoreService {
         return true;
     }
 
+    @Override
     public Boolean quantityUpdate(SetProductQuantityStateRequest request) {
         Product product = findIfExists(request.getProductId());
         product.setQuantityState(request.getQuantityState());
@@ -56,6 +61,7 @@ public class StoreServiceImpl implements StoreService {
         return true;
     }
 
+    @Override
     public ProductDto getById(UUID productId) {
         return mapper.toDto(findIfExists(productId));
     }
