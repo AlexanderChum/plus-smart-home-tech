@@ -28,39 +28,64 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public ShoppingCartDto get(String username) {
-        usernameCheck(username);
-        Optional<Cart> cart = repository.findByUsername(username);
-        if (cart.isPresent()) {
-            return mapper.toDto(cart.get());
-        } else {
-            return mapper.toDto(new Cart(null, username, true, new HashMap<>()));
-        }
+        return mapper.toDto(usernameCheckAndGetCart(username));
     }
 
     @Override
     public ShoppingCartDto add(String username, Map<UUID, Long> products) {
-
+        Cart cart = usernameCheckAndGetCart(username);
+        if (cart.getState().equals(false)) {
+            throw new RuntimeException("Тележка недоступна для обновления");
+        } else {
+            for (UUID productId : products.keySet()) {
+                if (cart.getProducts().containsKey(productId)) {
+                    Long quantity = cart.getProducts().get(productId) + products.get(productId);
+                    cart.getProducts().put(productId, quantity);
+                } else {
+                    cart.getProducts().put(productId, products.get(productId));
+                }
+            }
+        }
+        return mapper.toDto(repository.save(cart));
     }
 
     @Override
     public Boolean deleteCart(String username) {
-
+        Cart cart = usernameCheckAndGetCart(username);
+        cart.setState(false);
+        repository.save(cart);
+        return true;
     }
 
     @Override
     public ShoppingCartDto removeProducts(String username, List<UUID> productIds) {
-
+        Cart cart = usernameCheckAndGetCart(username);
+        if (cart.getState().equals(false)) {
+            throw new RuntimeException("Тележка недоступна для обновления");
+        } else {
+            for (UUID productId : productIds) {
+                cart.getProducts().remove(productId);
+            }
+        }
+        return mapper.toDto(repository.save(cart));
     }
 
     @Override
     public ShoppingCartDto changeQuantity(String username, ChangeProductQuantityRequest request) {
-
+        Cart cart = usernameCheckAndGetCart(username);
+        if (cart.getState().equals(false)) {
+            throw new RuntimeException("Тележка недоступна для обновлений");
+        } else {
+            cart.getProducts().put(request.getProductId(), request.getQuantity());
+            return mapper.toDto(repository.save(cart));
+        }
     }
 
-    private boolean usernameCheck(String username) {
+    private Cart usernameCheckAndGetCart(String username) {
         if (username == null || username.isEmpty()) {
             throw new NotAuthorizedUserException("Пустое имя пользователя");
         }
-        return true;
+        Optional<Cart> cart = repository.findByUsername(username);
+        return cart.orElseGet(() -> new Cart(null, username, true, new HashMap<>()));
     }
 }
