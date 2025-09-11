@@ -13,7 +13,7 @@ public interface CartService {
 
     ShoppingCartDto add(String username, Map<UUID, Long> products);
 
-    Boolean deleteCart(String username);
+    void deleteCart(String username);
 
     ShoppingCartDto removeProducts(String username, List<UUID> productIds);
 

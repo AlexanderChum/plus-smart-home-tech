@@ -1,4 +1,4 @@
-package ru.practicum.cart.Models;
+package ru.practicum.warehouse.Models;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -7,17 +7,17 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ChangeProductQuantityRequest {
+public class BookedProductsDto {
+    @NotNull
+    Double deliveryWeight;
 
     @NotNull
-    UUID productId;
+    Double deliveryVolume;
 
     @NotNull
-    Long newQuantity;
+    Boolean fragile;
 }

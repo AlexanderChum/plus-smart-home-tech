@@ -9,6 +9,7 @@ import ru.practicum.Mapper.CartMapper;
 import ru.practicum.Models.Cart;
 import ru.practicum.Repositories.CartRepository;
 import ru.practicum.cart.Models.ChangeProductQuantityRequest;
+import ru.practicum.cart.Models.Error.NoProductsInShoppingCartException;
 import ru.practicum.cart.Models.Error.NotAuthorizedUserException;
 import ru.practicum.cart.Models.ShoppingCartDto;
 
@@ -28,44 +29,41 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public ShoppingCartDto get(String username) {
-        return mapper.toDto(usernameCheckAndGetCart(username));
+        Cart cart = usernameCheckAndGetCart(username);
+        log.debug("Получена тележка для пользователя");
+        return mapper.toDto(repository.save(cart));
     }
 
     @Override
     public ShoppingCartDto add(String username, Map<UUID, Long> products) {
         Cart cart = usernameCheckAndGetCart(username);
-        if (cart.getState().equals(false)) {
-            throw new RuntimeException("Тележка недоступна для обновления");
-        } else {
-            for (UUID productId : products.keySet()) {
-                if (cart.getProducts().containsKey(productId)) {
-                    Long quantity = cart.getProducts().get(productId) + products.get(productId);
-                    cart.getProducts().put(productId, quantity);
-                } else {
-                    cart.getProducts().put(productId, products.get(productId));
-                }
+        log.debug("Получена тележка для пользователя");
+        repository.save(cart);
+        for (UUID productId : products.keySet()) {
+            if (cart.getProducts().containsKey(productId)) {
+                Long quantity = cart.getProducts().get(productId) + products.get(productId);
+                cart.getProducts().put(productId, quantity);
+            } else {
+                cart.getProducts().put(productId, products.get(productId));
             }
         }
         return mapper.toDto(repository.save(cart));
     }
 
     @Override
-    public Boolean deleteCart(String username) {
+    public void deleteCart(String username) {
         Cart cart = usernameCheckAndGetCart(username);
+        log.debug("Получена тележка для пользователя");
         cart.setState(false);
         repository.save(cart);
-        return true;
     }
 
     @Override
     public ShoppingCartDto removeProducts(String username, List<UUID> productIds) {
         Cart cart = usernameCheckAndGetCart(username);
-        if (cart.getState().equals(false)) {
-            throw new RuntimeException("Тележка недоступна для обновления");
-        } else {
-            for (UUID productId : productIds) {
-                cart.getProducts().remove(productId);
-            }
+        log.debug("Получена тележка для пользователя");
+        for (UUID productId : productIds) {
+            cart.getProducts().remove(productId);
         }
         return mapper.toDto(repository.save(cart));
     }
@@ -73,12 +71,13 @@ public class CartServiceImpl implements CartService {
     @Override
     public ShoppingCartDto changeQuantity(String username, ChangeProductQuantityRequest request) {
         Cart cart = usernameCheckAndGetCart(username);
-        if (cart.getState().equals(false)) {
-            throw new RuntimeException("Тележка недоступна для обновлений");
-        } else {
-            cart.getProducts().put(request.getProductId(), request.getQuantity());
-            return mapper.toDto(repository.save(cart));
+        log.debug("Получена тележка для пользователя");
+        if (!cart.getProducts().containsKey(request.getProductId())) {
+            throw new NoProductsInShoppingCartException("Продукт отсутствует в корзинке пользователя");
         }
+        cart.getProducts().put(request.getProductId(), request.getNewQuantity());
+        log.debug("Продукты в тележки изменены");
+        return mapper.toDto(repository.save(cart));
     }
 
     private Cart usernameCheckAndGetCart(String username) {

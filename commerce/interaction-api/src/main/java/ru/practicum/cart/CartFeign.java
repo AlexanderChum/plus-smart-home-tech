@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@FeignClient(name = "shopping-cart", path = "api/v1/shopping-cart")
+@FeignClient(name = "shopping-cart", path = "/api/v1/shopping-cart")
 public interface CartFeign {
 
     @GetMapping
@@ -25,11 +25,12 @@ public interface CartFeign {
     ShoppingCartDto add(@RequestParam String username, @RequestBody Map<UUID, Long> products);
 
     @DeleteMapping
-    Boolean deleteCart(@RequestParam String username);
+    void deleteCart(@RequestParam String username);
 
     @PostMapping("/remove")
     ShoppingCartDto removeProducts(@RequestParam String username, @RequestBody List<UUID> productIds);
 
     @PostMapping("/change-quantity")
-    ShoppingCartDto quantityUpdate(@RequestParam String username, @RequestBody @Valid ChangeProductQuantityRequest request);
+    ShoppingCartDto quantityUpdate(@RequestParam String username,
+                                   @RequestBody @Valid ChangeProductQuantityRequest request);
 }

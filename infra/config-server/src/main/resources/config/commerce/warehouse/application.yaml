@@ -3,12 +3,12 @@ server:
 
 spring:
   application:
-    name: shopping-cart
+    name: warehouse
   datasource:
     driverClassName: org.postgresql.Driver
-    username: cart
-    password: cart
-    url: jdbc:postgresql://localhost:6543/cart
+    username: warehouse
+    password: warehouse
+    url: jdbc:postgresql://localhost:6544/warehouse
   jpa:
     hibernate:
       ddl-auto: none

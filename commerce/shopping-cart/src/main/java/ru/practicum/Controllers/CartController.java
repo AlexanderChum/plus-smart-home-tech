@@ -25,26 +25,31 @@ public class CartController implements CartFeign {
 
     @Override
     public ShoppingCartDto get(String username) {
+        log.debug("Попытка получить тележку пользователя");
         return service.get(username);
     }
 
     @Override
     public ShoppingCartDto add(String username, Map<UUID, Long> products) {
+        log.debug("Попытка создать тележку");
         return service.add(username, products);
     }
 
     @Override
-    public Boolean deleteCart(String username) {
-        return service.deleteCart(username);
+    public void deleteCart(String username) {
+        log.debug("Попытка деактивировать тележку");
+        service.deleteCart(username);
     }
 
     @Override
     public ShoppingCartDto removeProducts(String username, List<UUID> productIds) {
+        log.debug("Попытка убрать товары из тележку");
         return service.removeProducts(username, productIds);
     }
 
     @Override
     public ShoppingCartDto quantityUpdate(String username, ChangeProductQuantityRequest request) {
+        log.debug("Попытка изменить количество товаров в тележке");
         return service.changeQuantity(username, request);
     }
 }

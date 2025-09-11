@@ -73,7 +73,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>ru.practicum.CartApp</mainClass>
+                    <mainClass>ru.practicum.WarehouseApp</mainClass>
                     <layout>JAR</layout>
                 </configuration>
             </plugin>

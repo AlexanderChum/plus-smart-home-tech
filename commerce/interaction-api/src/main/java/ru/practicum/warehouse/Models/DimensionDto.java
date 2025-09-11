@@ -1,5 +1,6 @@
-package ru.practicum.cart.Models;
+package ru.practicum.warehouse.Models;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -7,17 +8,20 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ChangeProductQuantityRequest {
+public class DimensionDto {
+    @NotNull
+    @Min(value = 1)
+    Double width;
 
     @NotNull
-    UUID productId;
+    @Min(value = 1)
+    Double height;
 
     @NotNull
-    Long newQuantity;
+    @Min(value = 1)
+    Double depth;
 }

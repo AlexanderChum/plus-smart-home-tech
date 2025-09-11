@@ -1,5 +1,6 @@
-package ru.practicum.cart.Models;
+package ru.practicum.warehouse.Models;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,12 +13,12 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ChangeProductQuantityRequest {
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+public class AddProductToWarehouseRequest {
 
-    @NotNull
     UUID productId;
 
+    @Min(value = 1)
     @NotNull
-    Long newQuantity;
+    Long quantity;
 }
