@@ -1,0 +1,26 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: shopping-cart
+  datasource:
+    driverClassName: org.postgresql.Driver
+    username: cart
+    password: cart
+    url: jdbc:postgresql://localhost:6543/cart
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: 'true'
+    show-sql: 'true'
+  sql:
+    init:
+      mode: always
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname:localhost}:${eureka.instance.port:8761}/eureka/
