@@ -11,7 +11,7 @@ spring:
     url: jdbc:postgresql://localhost:6543/cart
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: 'true'
