@@ -73,7 +73,7 @@ public class CartServiceImpl implements CartService {
         Cart cart = usernameCheckAndGetCart(username);
         log.debug("Получена тележка для пользователя");
         if (!cart.getProducts().containsKey(request.getProductId())) {
-            throw new NoProductsInShoppingCartException("Продукт отсутствует в корзинке пользователя");
+            throw new NoProductsInShoppingCartException("");
         }
         cart.getProducts().put(request.getProductId(), request.getNewQuantity());
         log.debug("Продукты в тележки изменены");
@@ -82,7 +82,7 @@ public class CartServiceImpl implements CartService {
 
     private Cart usernameCheckAndGetCart(String username) {
         if (username == null || username.isEmpty()) {
-            throw new NotAuthorizedUserException("Пустое имя пользователя");
+            throw new NotAuthorizedUserException("");
         }
         Optional<Cart> cart = repository.findByUsername(username);
         return cart.orElseGet(() -> new Cart(null, username, true, new HashMap<>()));
