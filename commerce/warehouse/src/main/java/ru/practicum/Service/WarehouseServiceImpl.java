@@ -20,7 +20,6 @@ import ru.practicum.warehouse.Models.NewProductInWarehouseRequest;
 
 import java.security.SecureRandom;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
@@ -60,7 +59,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         boolean fragile = false;
 
         Map<UUID, Long> products = shoppingCartDto.getProducts();
-        log.debug("Отправка товаров на проверку и замеры");
+        log.info("Отправка товаров на проверку и замеры");
         for (UUID productUUID : products.keySet()) {
             StorageProduct product = repository.findById(productUUID)
                     .orElseThrow(() -> new NoSpecifiedProductInWarehouseException(""));
@@ -71,7 +70,7 @@ public class WarehouseServiceImpl implements WarehouseService {
             deliveryVolume += product.getWidth() * product.getHeight() * product.getDepth();
             fragile |= product.getFragile();
         }
-        log.debug("Возвращение итогов замеров");
+        log.info("Возвращение итогов замеров");
 
         return new BookedProductsDto(deliveryWeight, deliveryVolume, fragile);
     }
@@ -80,7 +79,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     public void add(AddProductToWarehouseRequest request) {
         StorageProduct product = repository.findById(request.getProductId())
                 .orElseThrow(() -> new NoSpecifiedProductInWarehouseException(""));
-        log.debug("Проверка пройдена, изменяем количество товара на складе");
+        log.info("Проверка пройдена, изменяем количество товара на складе");
         product.setQuantity(product.getQuantity() + request.getQuantity());
         repository.save(product);
     }

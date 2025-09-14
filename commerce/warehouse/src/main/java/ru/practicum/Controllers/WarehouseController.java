@@ -23,26 +23,28 @@ public class WarehouseController implements WarehouseFeign {
     WarehouseService service;
 
     @Override
-    public void put(NewProductInWarehouseRequest request) {
-        log.debug("Добавление нового продукта на склад");
+    public Boolean put(NewProductInWarehouseRequest request) {
+        log.info("Добавление нового продукта на склад");
         service.put(request);
+        return true;
     }
 
     @Override
     public BookedProductsDto check(ShoppingCartDto cartDto) {
-        log.debug("Проверка продуктов для тележки");
+        log.info("Проверка продуктов для тележки");
         return service.check(cartDto);
     }
 
     @Override
-    public void add(AddProductToWarehouseRequest request) {
-        log.debug("Обновление количества товаров на складе");
+    public Boolean add(AddProductToWarehouseRequest request) {
+        log.info("Обновление количества товаров на складе");
         service.add(request);
+        return true;
     }
 
     @Override
     public AddressDto getAddress() {
-        log.debug("Получение адреса");
+        log.info("Получение адреса");
         return service.getAddress();
     }
 }

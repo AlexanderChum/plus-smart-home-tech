@@ -29,21 +29,21 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Page<ProductDto> getByCategory(ProductCategory category, Pageable pageable) {
         Page<Product> products = repository.findAllByProductCategory(category, pageable);
-        log.debug("Возвращение пагинированных товаров");
+        log.info("Возвращение пагинированных товаров");
         return products.map(mapper::toDto);
     }
 
     @Override
     public ProductDto add(ProductDto dto) {
         Product product = mapper.fromDto(dto);
-        log.debug("Товар добавляется на витрину");
+        log.info("Товар добавляется на витрину");
         return mapper.toDto(findIfExists(repository.save(product).getId()));
     }
 
     @Override
     public ProductDto update(ProductDto dto) {
         findIfExists(dto.getProductId());
-        log.debug("Товар обновляется на витрине");
+        log.info("Товар обновляется на витрине");
         Product savedProduct = repository.save(mapper.fromDto(dto));
         return mapper.toDto(findIfExists(savedProduct.getId()));
     }
@@ -51,7 +51,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Boolean remove(UUID productId) {
         Product product = findIfExists(productId);
-        log.debug("Товар найден, деактивируется");
+        log.info("Товар найден, деактивируется");
         product.setProductState(ProductState.DEACTIVATE);
         repository.save(product);
         return true;
@@ -60,7 +60,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Boolean quantityUpdate(SetProductQuantityStateRequest request) {
         Product product = findIfExists(request.getProductId());
-        log.debug("Обновление количества товара");
+        log.info("Обновление количества товара");
         product.setQuantityState(request.getQuantityState());
         repository.save(product);
         return true;
@@ -68,7 +68,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public ProductDto getById(UUID productId) {
-        log.debug("Возвращение результата из сервиса");
+        log.info("Возвращение результата из сервиса");
         return mapper.toDto(findIfExists(productId));
     }
 

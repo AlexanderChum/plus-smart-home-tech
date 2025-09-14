@@ -30,14 +30,14 @@ public class CartServiceImpl implements CartService {
     @Override
     public ShoppingCartDto get(String username) {
         Cart cart = usernameCheckAndGetCart(username);
-        log.debug("Получена тележка для пользователя");
+        log.info("Получена тележка для пользователя");
         return mapper.toDto(repository.save(cart));
     }
 
     @Override
     public ShoppingCartDto add(String username, Map<UUID, Long> products) {
         Cart cart = usernameCheckAndGetCart(username);
-        log.debug("Получена тележка для пользователя");
+        log.info("Получена тележка для пользователя");
         repository.save(cart);
         for (UUID productId : products.keySet()) {
             if (cart.getProducts().containsKey(productId)) {
@@ -53,7 +53,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteCart(String username) {
         Cart cart = usernameCheckAndGetCart(username);
-        log.debug("Получена тележка для пользователя");
+        log.info("Получена тележка для пользователя");
         cart.setState(false);
         repository.save(cart);
     }
@@ -61,7 +61,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public ShoppingCartDto removeProducts(String username, List<UUID> productIds) {
         Cart cart = usernameCheckAndGetCart(username);
-        log.debug("Получена тележка для пользователя");
+        log.info("Получена тележка для пользователя");
         for (UUID productId : productIds) {
             cart.getProducts().remove(productId);
         }
@@ -71,17 +71,17 @@ public class CartServiceImpl implements CartService {
     @Override
     public ShoppingCartDto changeQuantity(String username, ChangeProductQuantityRequest request) {
         Cart cart = usernameCheckAndGetCart(username);
-        log.debug("Получена тележка для пользователя");
+        log.info("Получена тележка для пользователя");
         if (!cart.getProducts().containsKey(request.getProductId())) {
             throw new NoProductsInShoppingCartException("");
         }
         cart.getProducts().put(request.getProductId(), request.getNewQuantity());
-        log.debug("Продукты в тележки изменены");
+        log.info("Продукты в тележки изменены");
         return mapper.toDto(repository.save(cart));
     }
 
     private Cart usernameCheckAndGetCart(String username) {
-        if (username == null || username.isEmpty()) {
+        if (username == null || username.isBlank()) {
             throw new NotAuthorizedUserException("");
         }
         Optional<Cart> cart = repository.findByUsername(username);

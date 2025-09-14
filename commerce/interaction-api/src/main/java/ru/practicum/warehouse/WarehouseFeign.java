@@ -16,13 +16,13 @@ import ru.practicum.warehouse.Models.NewProductInWarehouseRequest;
 public interface WarehouseFeign {
 
     @PutMapping
-    void put(@RequestBody @Valid NewProductInWarehouseRequest request);
+    Boolean put(@RequestBody @Valid NewProductInWarehouseRequest request);
 
     @PostMapping("/check")
     BookedProductsDto check(@RequestBody @Valid ShoppingCartDto cart);
 
     @PostMapping("/add")
-    void add(@RequestBody @Valid AddProductToWarehouseRequest request);
+    Boolean add(@RequestBody @Valid AddProductToWarehouseRequest request);
 
     @GetMapping("/address")
     AddressDto getAddress();
