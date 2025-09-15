@@ -1,0 +1,81 @@
+package ru.practicum.Services;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.Mapper.StoreMapper;
+import ru.practicum.store.Models.Errors.ProductNotFoundException;
+import ru.practicum.Models.Product;
+import ru.practicum.store.Models.ProductCategory;
+import ru.practicum.store.Models.ProductDto;
+import ru.practicum.store.Models.ProductState;
+import ru.practicum.store.Models.SetProductQuantityStateRequest;
+import ru.practicum.Repositories.StoreRepository;
+
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
+@Transactional
+public class StoreServiceImpl implements StoreService {
+    StoreRepository repository;
+    StoreMapper mapper;
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<ProductDto> getByCategory(ProductCategory category, Pageable pageable) {
+        Page<Product> products = repository.findAllByProductCategory(category, pageable);
+        log.info("Возвращение пагинированных товаров");
+        return products.map(mapper::toDto);
+    }
+
+    @Override
+    public ProductDto add(ProductDto dto) {
+        Product product = mapper.fromDto(dto);
+        log.info("Товар добавляется на витрину");
+        return mapper.toDto(findIfExists(repository.save(product).getId()));
+    }
+
+    @Override
+    public ProductDto update(ProductDto dto) {
+        Product productToUpdate = findIfExists(dto.getProductId());
+        log.info("Товар обновляется на витрине");
+        mapper.updateFromDto(productToUpdate, dto);
+        return mapper.toDto(productToUpdate);
+    }
+
+    @Override
+    public Boolean remove(UUID productId) {
+        Product product = findIfExists(productId);
+        log.info("Товар найден, деактивируется");
+        product.setProductState(ProductState.DEACTIVATE);
+        return true;
+    }
+
+    @Override
+    public Boolean quantityUpdate(SetProductQuantityStateRequest request) {
+        Product product = findIfExists(request.getProductId());
+        log.info("Обновление количества товара");
+        product.setQuantityState(request.getQuantityState());
+        return true;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public ProductDto getById(UUID productId) {
+        log.info("Возвращение результата из сервиса");
+        return mapper.toDto(findIfExists(productId));
+    }
+
+    private Product findIfExists(UUID productId) {
+        return repository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+    }
+}
