@@ -76,6 +76,6 @@ public class StoreServiceImpl implements StoreService {
 
     private Product findIfExists(UUID productId) {
         return repository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException(""));
+                .orElseThrow(ProductNotFoundException::new);
     }
 }

@@ -47,7 +47,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public void put(NewProductInWarehouseRequest request) {
         if (repository.existsById(request.getProductId())) {
-            throw new SpecifiedProductAlreadyInWarehouseException("");
+            throw new SpecifiedProductAlreadyInWarehouseException();
         } else {
             repository.save(mapper.fromDto(request));
         }
@@ -63,9 +63,9 @@ public class WarehouseServiceImpl implements WarehouseService {
         log.info("Отправка товаров на проверку и замеры");
         for (UUID productUUID : products.keySet()) {
             StorageProduct product = repository.findById(productUUID)
-                    .orElseThrow(() -> new NoSpecifiedProductInWarehouseException(""));
+                    .orElseThrow(NoSpecifiedProductInWarehouseException::new);
             if (product.getQuantity() < products.get(productUUID)) {
-                throw new ProductShoppingCartLowQuantityInWarehouse("");
+                throw new ProductShoppingCartLowQuantityInWarehouse();
             }
             deliveryWeight += product.getWeight();
             deliveryVolume += product.getWidth() * product.getHeight() * product.getDepth();
@@ -79,7 +79,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public void add(AddProductToWarehouseRequest request) {
         StorageProduct product = repository.findById(request.getProductId())
-                .orElseThrow(() -> new NoSpecifiedProductInWarehouseException(""));
+                .orElseThrow(NoSpecifiedProductInWarehouseException::new);
         log.info("Проверка пройдена, изменяем количество товара на складе");
         product.setQuantity(product.getQuantity() + request.getQuantity());
     }
