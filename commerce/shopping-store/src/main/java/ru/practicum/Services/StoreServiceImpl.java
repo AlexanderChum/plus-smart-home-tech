@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.Mapper.StoreMapper;
 import ru.practicum.store.Models.Errors.ProductNotFoundException;
 import ru.practicum.Models.Product;
@@ -22,10 +23,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
+@Transactional
 public class StoreServiceImpl implements StoreService {
     StoreRepository repository;
     StoreMapper mapper;
 
+    @Transactional(readOnly = true)
     @Override
     public Page<ProductDto> getByCategory(ProductCategory category, Pageable pageable) {
         Page<Product> products = repository.findAllByProductCategory(category, pageable);
@@ -42,10 +45,10 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public ProductDto update(ProductDto dto) {
-        findIfExists(dto.getProductId());
+        Product productToUpdate = findIfExists(dto.getProductId());
         log.info("Товар обновляется на витрине");
-        Product savedProduct = repository.save(mapper.fromDto(dto));
-        return mapper.toDto(findIfExists(savedProduct.getId()));
+        mapper.updateFromDto(productToUpdate, dto);
+        return mapper.toDto(productToUpdate);
     }
 
     @Override
@@ -53,7 +56,6 @@ public class StoreServiceImpl implements StoreService {
         Product product = findIfExists(productId);
         log.info("Товар найден, деактивируется");
         product.setProductState(ProductState.DEACTIVATE);
-        repository.save(product);
         return true;
     }
 
@@ -62,10 +64,10 @@ public class StoreServiceImpl implements StoreService {
         Product product = findIfExists(request.getProductId());
         log.info("Обновление количества товара");
         product.setQuantityState(request.getQuantityState());
-        repository.save(product);
         return true;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public ProductDto getById(UUID productId) {
         log.info("Возвращение результата из сервиса");
