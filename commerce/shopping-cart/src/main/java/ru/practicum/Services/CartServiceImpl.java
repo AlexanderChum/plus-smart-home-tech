@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.Mapper.CartMapper;
 import ru.practicum.Models.Cart;
 import ru.practicum.Repositories.CartRepository;
@@ -23,15 +24,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
+@Transactional
 public class CartServiceImpl implements CartService {
     CartRepository repository;
     CartMapper mapper;
 
+    @Transactional(readOnly = true)
     @Override
     public ShoppingCartDto get(String username) {
         Cart cart = usernameCheckAndGetCart(username);
         log.info("Получена тележка для пользователя");
-        return mapper.toDto(repository.save(cart));
+        return mapper.toDto(cart);
     }
 
     @Override
@@ -47,7 +50,7 @@ public class CartServiceImpl implements CartService {
                 cart.getProducts().put(productId, products.get(productId));
             }
         }
-        return mapper.toDto(repository.save(cart));
+        return mapper.toDto(cart);
     }
 
     @Override
@@ -55,7 +58,6 @@ public class CartServiceImpl implements CartService {
         Cart cart = usernameCheckAndGetCart(username);
         log.info("Получена тележка для пользователя");
         cart.setState(false);
-        repository.save(cart);
     }
 
     @Override
@@ -65,7 +67,7 @@ public class CartServiceImpl implements CartService {
         for (UUID productId : productIds) {
             cart.getProducts().remove(productId);
         }
-        return mapper.toDto(repository.save(cart));
+        return mapper.toDto(cart);
     }
 
     @Override
@@ -77,7 +79,7 @@ public class CartServiceImpl implements CartService {
         }
         cart.getProducts().put(request.getProductId(), request.getNewQuantity());
         log.info("Продукты в тележки изменены");
-        return mapper.toDto(repository.save(cart));
+        return mapper.toDto(cart);
     }
 
     private Cart usernameCheckAndGetCart(String username) {

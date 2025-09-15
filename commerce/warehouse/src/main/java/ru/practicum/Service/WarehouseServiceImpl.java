@@ -27,6 +27,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Slf4j
+@Transactional
 public class WarehouseServiceImpl implements WarehouseService {
     WarehouseRepository repository;
     WarehouseMapper mapper;
@@ -81,6 +82,5 @@ public class WarehouseServiceImpl implements WarehouseService {
                 .orElseThrow(() -> new NoSpecifiedProductInWarehouseException(""));
         log.info("Проверка пройдена, изменяем количество товара на складе");
         product.setQuantity(product.getQuantity() + request.getQuantity());
-        repository.save(product);
     }
 }
