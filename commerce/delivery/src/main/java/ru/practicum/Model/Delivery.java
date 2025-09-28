@@ -31,6 +31,8 @@ public class Delivery {
     @UuidGenerator
     UUID deliveryId;
 
+    UUID orderId;
+
     @ManyToOne
     @JoinColumn(name = "from_address_id")
     Address fromAddress;
