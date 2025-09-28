@@ -36,5 +36,6 @@ spring:
           predicates:
           - Path=/delivery/**
           filters: PrefixPath=/api/v1
+          
 server:
   port: 8080
