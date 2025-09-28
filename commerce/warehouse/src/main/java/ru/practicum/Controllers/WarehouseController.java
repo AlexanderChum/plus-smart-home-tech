@@ -10,9 +10,14 @@ import ru.practicum.Service.WarehouseService;
 import ru.practicum.cart.Models.ShoppingCartDto;
 import ru.practicum.warehouse.Models.AddProductToWarehouseRequest;
 import ru.practicum.warehouse.Models.AddressDto;
+import ru.practicum.warehouse.Models.AssemblyProductsForOrderRequest;
 import ru.practicum.warehouse.Models.BookedProductsDto;
 import ru.practicum.warehouse.Models.NewProductInWarehouseRequest;
+import ru.practicum.warehouse.Models.ShippedToDeliveryRequest;
 import ru.practicum.warehouse.WarehouseFeign;
+
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/warehouse")
@@ -30,9 +35,27 @@ public class WarehouseController implements WarehouseFeign {
     }
 
     @Override
+    public void shipRequesting(ShippedToDeliveryRequest request) {
+        log.info("Запрос на передачу в доставку");
+        service.shipmentRequesting(request);
+    }
+
+    @Override
+    public void returnRequesting(Map<UUID, Long> products) {
+        log.info("Возвращение букированных продуктов");
+        service.returnRequesting(products);
+    }
+
+    @Override
     public BookedProductsDto check(ShoppingCartDto cartDto) {
         log.info("Проверка продуктов для тележки");
         return service.check(cartDto);
+    }
+
+    @Override
+    public BookedProductsDto assembly(AssemblyProductsForOrderRequest request) {
+        log.info("Сборка заказа");
+        return service.assembly(request);
     }
 
     @Override

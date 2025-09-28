@@ -52,4 +52,10 @@ public class CartController implements CartFeign {
         log.info("Попытка изменить количество товаров в тележке");
         return service.changeQuantity(username, request);
     }
+
+    @Override
+    public String getUser(UUID id) {
+        log.info("Получение пользователя");
+        return service.getUser(id);
+    }
 }
