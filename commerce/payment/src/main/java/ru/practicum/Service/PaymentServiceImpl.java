@@ -31,6 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
     StoreFeign storeClient;
     private final Double NDS_MODIFIER = 0.1;
 
+    @Override
     public PaymentDto createPayment(OrderDto dto) {
         log.info("Создание платежки");
         Payment payment = new Payment(
@@ -44,12 +45,16 @@ public class PaymentServiceImpl implements PaymentService {
         return mapper.toDto(repository.save(payment));
     }
 
+    @Transactional(readOnly = true)
+    @Override
     public Double getTotalCost(OrderDto dto) {
         log.info("Получение суммарной стоимости");
         Double totalCost = getProductsCost(dto);
         return totalCost + totalCost * NDS_MODIFIER + dto.getDeliveryPrice();
     }
 
+    @Transactional(readOnly = true)
+    @Override
     public Double getProductsCost(OrderDto dto) {
         log.info("Получение стоимости продуктов");
         if (dto.getProducts().isEmpty()) throw new NotEnoughInfoInOrderToCalculateException();
@@ -61,6 +66,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .sum();
     }
 
+    @Override
     public void getSuccess(UUID id) {
         log.info("Смена статуса на success");
         Payment payment = checkPayment(id);
@@ -68,6 +74,7 @@ public class PaymentServiceImpl implements PaymentService {
         orderClient.orderPayment(id);
     }
 
+    @Override
     public void getFailed(UUID id) {
         log.info("Смена статуса на failed");
         Payment payment = checkPayment(id);

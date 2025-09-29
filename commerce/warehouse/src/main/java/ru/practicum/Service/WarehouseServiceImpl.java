@@ -52,6 +52,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void put(NewProductInWarehouseRequest request) {
+        log.info("Попытка добавить новый товар на склад");
         if (warehouseRepository.existsById(request.getProductId())) {
             throw new SpecifiedProductAlreadyInWarehouseException();
         } else {
@@ -60,7 +61,9 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BookedProductsDto check(ShoppingCartDto shoppingCartDto) {
+        log.info("Попытка замерить товары из корзины");
         return checkProducts(shoppingCartDto.getProducts());
     }
 

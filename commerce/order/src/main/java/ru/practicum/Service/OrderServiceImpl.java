@@ -41,6 +41,7 @@ public class OrderServiceImpl implements OrderService {
     CartFeign cartClient;
 
     @Transactional(readOnly = true)
+    @Override
     public List<OrderDto> getOrders(String username) {
         log.info("Получение заказов пользователя");
         if (username.isBlank()) throw new NotAuthorizedUserException();
@@ -49,6 +50,7 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    @Override
     public OrderDto addOrder(CreateNewOrderRequest request) {
         ShoppingCartDto cartDto = request.getCartDto();
         String user = cartClient.getUser(cartDto.getCartId());
@@ -85,6 +87,7 @@ public class OrderServiceImpl implements OrderService {
         return mapper.toDto(order);
     }
 
+    @Override
     public OrderDto returnProduct(ProductReturnRequest request) {
         log.info("Разбукирование продуктов");
         Order order = checkOrder(request.getOrderId());
@@ -93,31 +96,37 @@ public class OrderServiceImpl implements OrderService {
         return mapper.toDto(order);
     }
 
+    @Override
     public OrderDto orderPayment(UUID id) {
         log.info("Оплата заказа");
         return mapper.toDto(checkOrderSetState(id, OrderState.PAID));
     }
 
+    @Override
     public OrderDto orderPaymentFailed(UUID id) {
         log.info("Провал оплаты заказа");
         return mapper.toDto(checkOrderSetState(id, OrderState.PAYMENT_FAILED));
     }
 
+    @Override
     public OrderDto orderDelivery(UUID id) {
         log.info("Доставка заказа");
         return mapper.toDto(checkOrderSetState(id, OrderState.DELIVERED));
     }
 
+    @Override
     public OrderDto orderDeliveryFailed(UUID id) {
         log.info("Провал доставки заказа");
         return mapper.toDto(checkOrderSetState(id, OrderState.DELIVERY_FAILED));
     }
 
+    @Override
     public OrderDto orderCompleted(UUID id) {
         log.info("Завершение заказа");
         return mapper.toDto(checkOrderSetState(id, OrderState.COMPLETED));
     }
 
+    @Override
     public OrderDto orderCalculatedTotal(UUID id) {
         log.info("Заполнение полей стоимости заказа");
         Order order = checkOrder(id);
@@ -126,6 +135,7 @@ public class OrderServiceImpl implements OrderService {
         return mapper.toDto(order);
     }
 
+    @Override
     public OrderDto orderCalculatedDelivery(UUID id) {
         log.info("Подсчет стоимости доставки заказа");
         Order order = checkOrder(id);
@@ -133,11 +143,13 @@ public class OrderServiceImpl implements OrderService {
         return mapper.toDto(order);
     }
 
+    @Override
     public OrderDto orderAssembly(UUID id) {
         log.info("Сборка заказа");
         return mapper.toDto(checkOrderSetState(id, OrderState.ASSEMBLED));
     }
 
+    @Override
     public OrderDto orderAssemblyFailed(UUID id) {
         log.info("Провал сборки заказа");
         return mapper.toDto(checkOrderSetState(id, OrderState.ASSEMBLY_FAILED));

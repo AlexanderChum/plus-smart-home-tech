@@ -1,5 +1,6 @@
 package ru.practicum.order.Models;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,5 +19,6 @@ public class ProductReturnRequest {
     UUID orderId;
 
     @NotNull
+    @NotEmpty
     Map<UUID, Long> products;
 }

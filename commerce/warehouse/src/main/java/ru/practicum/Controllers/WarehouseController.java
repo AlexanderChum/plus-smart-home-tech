@@ -4,7 +4,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.Service.WarehouseService;
 import ru.practicum.cart.Models.ShoppingCartDto;
@@ -28,6 +30,7 @@ public class WarehouseController implements WarehouseFeign {
     WarehouseService service;
 
     @Override
+    @ResponseStatus(HttpStatus.CREATED)
     public Boolean put(NewProductInWarehouseRequest request) {
         log.info("Добавление нового продукта на склад");
         service.put(request);
@@ -35,30 +38,35 @@ public class WarehouseController implements WarehouseFeign {
     }
 
     @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void shipRequesting(ShippedToDeliveryRequest request) {
         log.info("Запрос на передачу в доставку");
         service.shipmentRequesting(request);
     }
 
     @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void returnRequesting(Map<UUID, Long> products) {
         log.info("Возвращение букированных продуктов");
         service.returnRequesting(products);
     }
 
     @Override
+    @ResponseStatus(HttpStatus.OK)
     public BookedProductsDto check(ShoppingCartDto cartDto) {
         log.info("Проверка продуктов для тележки");
         return service.check(cartDto);
     }
 
     @Override
+    @ResponseStatus(HttpStatus.OK)
     public BookedProductsDto assembly(AssemblyProductsForOrderRequest request) {
         log.info("Сборка заказа");
         return service.assembly(request);
     }
 
     @Override
+    @ResponseStatus(HttpStatus.OK)
     public Boolean add(AddProductToWarehouseRequest request) {
         log.info("Обновление количества товаров на складе");
         service.add(request);
@@ -66,6 +74,7 @@ public class WarehouseController implements WarehouseFeign {
     }
 
     @Override
+    @ResponseStatus(HttpStatus.OK)
     public AddressDto getAddress() {
         log.info("Получение адреса");
         return service.getAddress();

@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +34,7 @@ public class OrderBooking {
     @UuidGenerator
     UUID bookingId;
 
+    @NotNull
     UUID orderId;
 
     UUID deliveryId;
@@ -40,5 +43,7 @@ public class OrderBooking {
     @CollectionTable(name = "order_products", joinColumns = @JoinColumn(name = "booking_id"))
     @MapKeyColumn(name = "product_id")
     @Column(name = "quantity")
-    private Map<UUID, Long> products;
+    @NotNull
+    @NotEmpty
+    Map<UUID, Long> products;
 }

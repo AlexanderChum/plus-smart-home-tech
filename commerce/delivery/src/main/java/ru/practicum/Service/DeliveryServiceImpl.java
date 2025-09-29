@@ -38,6 +38,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     WarehouseFeign warehouseClient;
     OrderFeign orderClient;
 
+    @Override
     public DeliveryDto createDelivery(DeliveryDto dto) {
         log.info("Получен запрос на создание доставки");
         Delivery delivery = mapper.deliveryFromDto(dto);
@@ -47,6 +48,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         return mapper.deliveryToDto(addedDelivery);
     }
 
+    @Override
     public void changeSuccess(UUID id) {
         log.info("Смена статуса на success, service");
         Delivery delivery = checkDelivery(id);
@@ -54,6 +56,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         orderClient.orderCompleted(id);
     }
 
+    @Override
     public void changePicked(UUID id) {
         log.info("Смена статуса на picked, service");
         Delivery delivery = checkDelivery(id);
@@ -62,6 +65,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         warehouseClient.shipRequesting(new ShippedToDeliveryRequest(id, delivery.getDeliveryId()));
     }
 
+    @Override
     public void changeFailed(UUID id) {
         log.info("Смена статуса на failed, service");
         Delivery delivery = checkDelivery(id);
@@ -69,15 +73,16 @@ public class DeliveryServiceImpl implements DeliveryService {
         orderClient.orderDeliveryFailed(id);
     }
 
+    @Override
     public Double getCost(OrderDto dto) {
         Delivery delivery = checkDelivery(dto.getOrderId());
         log.info("Пройдена проверка на существование доставки");
 
         Double totalCost = BASIC_DELIVERY;
 
-        if (delivery.getFromAddress().getStreet().equals("ADDRESS_1")) {
+        if (("ADDRESS_1").equals(delivery.getFromAddress().getStreet())) {
             totalCost += totalCost * WAREHOUSE1_MODIFIER;
-        } else if (delivery.getFromAddress().getStreet().equals("ADDRESS_2")) {
+        } else if (("ADDRESS_2").equals(delivery.getFromAddress().getStreet())) {
             totalCost += totalCost * WAREHOUSE2_MODIFIER;
         }
 
