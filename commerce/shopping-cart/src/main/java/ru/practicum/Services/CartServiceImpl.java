@@ -1,5 +1,6 @@
 package ru.practicum.Services;
 
+import jakarta.ws.rs.NotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -80,6 +81,14 @@ public class CartServiceImpl implements CartService {
         cart.getProducts().put(request.getProductId(), request.getNewQuantity());
         log.info("Продукты в тележки изменены");
         return mapper.toDto(cart);
+    }
+
+    @Override
+    public String getUser(UUID id) {
+        log.info("Получение пользователя по id тележки");
+        Cart cart = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Такой пользователь не найден"));
+        return cart.getUsername();
     }
 
     private Cart usernameCheckAndGetCart(String username) {
