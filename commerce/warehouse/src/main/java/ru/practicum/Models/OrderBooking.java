@@ -43,7 +43,6 @@ public class OrderBooking {
     @CollectionTable(name = "order_products", joinColumns = @JoinColumn(name = "booking_id"))
     @MapKeyColumn(name = "product_id")
     @Column(name = "quantity")
-    @NotNull
     @NotEmpty
     Map<UUID, Long> products;
 }
