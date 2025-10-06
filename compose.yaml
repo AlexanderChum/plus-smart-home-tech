@@ -108,3 +108,60 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
+
+  db_payment:
+    image: postgres:16.1
+    container_name: pg-payment
+    ports:
+      - "6545:5432"
+    volumes:
+      - ./commerce/payment/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - POSTGRES_DB=payment
+      - POSTGRES_USER=payment
+      - POSTGRES_PASSWORD=payment
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
+  db_delivery:
+    image: postgres:16.1
+    container_name: pg-delivery
+    ports:
+      - "6546:5432"
+    volumes:
+      - ./commerce/delivery/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - POSTGRES_DB=delivery
+      - POSTGRES_USER=delivery
+      - POSTGRES_PASSWORD=delivery
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
+  db_order:
+    image: postgres:16.1
+    container_name: pg-order
+    ports:
+      - "6547:5432"
+    volumes:
+      - ./commerce/order/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - POSTGRES_DB=order
+      - POSTGRES_USER=order
+      - POSTGRES_PASSWORD=order
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10

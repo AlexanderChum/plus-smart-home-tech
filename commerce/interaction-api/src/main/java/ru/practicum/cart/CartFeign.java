@@ -1,6 +1,7 @@
 package ru.practicum.cart;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,4 +34,7 @@ public interface CartFeign {
     @PostMapping("/change-quantity")
     ShoppingCartDto quantityUpdate(@RequestParam String username,
                                    @RequestBody @Valid ChangeProductQuantityRequest request);
+
+    @GetMapping("/username")
+    String getUser(@NotNull UUID id);
 }

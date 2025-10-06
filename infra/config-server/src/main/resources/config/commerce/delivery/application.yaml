@@ -1,0 +1,26 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: delivery
+  datasource:
+    driverClassName: org.postgresql.Driver
+    username: delivery
+    password: delivery
+    url: jdbc:postgresql://localhost:6546/delivery
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: 'true'
+    show-sql: 'true'
+  sql:
+    init:
+      mode: always
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname:localhost}:${eureka.instance.port:8761}/eureka/
